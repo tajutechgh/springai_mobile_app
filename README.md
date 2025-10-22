@@ -1,6 +1,6 @@
 # springai_mobile_app
 
-Spring ai mobile app project using flutter
+Spring ai mobile app frontend project using flutter
 
 ## Getting Started
 
