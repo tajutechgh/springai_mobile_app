@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:springai_mobile_app/screens/navigation_screen.dart';
 
 class ChatAiModelWidget extends StatelessWidget {
   const ChatAiModelWidget({super.key});
@@ -11,7 +11,14 @@ class ChatAiModelWidget extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: InkWell(
         onTap: (){
-
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return NavigationScreen();
+              },
+            ),
+          );
         },
         child: Container(
           height: 150,

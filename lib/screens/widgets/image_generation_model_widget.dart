@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../navigation_screen.dart';
+
 class ImageGenerationModelWidget extends StatelessWidget {
   const ImageGenerationModelWidget({super.key});
 
@@ -10,7 +12,14 @@ class ImageGenerationModelWidget extends StatelessWidget {
       padding: EdgeInsets.all(10),
       child: InkWell(
         onTap: (){
-
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return NavigationScreen();
+              },
+            ),
+          );
         },
         child: Container(
           height: 150,

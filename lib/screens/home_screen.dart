@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
 
@@ -19,14 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80.0),
         child: AppBar(
-          backgroundColor: Colors.lightBlue,
-          elevation: 4.0,
+          backgroundColor: Colors.blueAccent,
+          elevation: 5.0,
           title: Center(
               child: Text(
                 "TajuDN AI App",
-                style: GoogleFonts.bungeeSpice(
+                style: GoogleFonts.honk(
                   textStyle: Theme.of(context).textTheme.displayLarge,
-                  fontSize: 30,
+                  fontSize: 40,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.normal,
                   letterSpacing: 1
@@ -51,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Powered By @TajutechGH",
                   style: GoogleFonts.roboto(
                     textStyle: Theme.of(context).textTheme.displayLarge,
-                    fontSize: 15,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 1,
