@@ -24,13 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
           elevation: 5.0,
           title: Center(
               child: Text(
-                "TajuDN AI App",
-                style: GoogleFonts.honk(
+                "Taju Ai App",
+                style: GoogleFonts.roboto(
                   textStyle: Theme.of(context).textTheme.displayLarge,
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.normal,
-                  letterSpacing: 1
+                  letterSpacing: 1,
+                  color: Colors.white
                 )
               )
           ),

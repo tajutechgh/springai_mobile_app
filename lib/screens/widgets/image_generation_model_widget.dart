@@ -32,7 +32,7 @@ class ImageGenerationModelWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/picture.png", width: 50,),
+                  Image.asset("assets/icons/picture.png", width: 60,),
                   SizedBox(width: 10,),
                   Text(
                     "Generate Image",

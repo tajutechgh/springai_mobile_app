@@ -32,7 +32,7 @@ class RecipePreparationModelWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/recipe.png", width: 50,),
+                  Image.asset("assets/icons/recipe.png", width: 60,),
                   SizedBox(width: 10,),
                   Text(
                     "Prepare Recipe",

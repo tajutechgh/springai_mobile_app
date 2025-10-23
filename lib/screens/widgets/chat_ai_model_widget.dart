@@ -31,10 +31,10 @@ class ChatAiModelWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/chat.png", width: 50,),
+                  Image.asset("assets/icons/chat.png", width: 60,),
                   SizedBox(width: 10,),
                   Text(
-                    "Ask TajuDN",
+                    "Ask Taju",
                     style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.displayLarge,
                       fontSize: 30,

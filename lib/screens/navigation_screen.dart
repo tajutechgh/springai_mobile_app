@@ -31,16 +31,17 @@ class _NavigationScreenState extends State<NavigationScreen> {
           elevation: 5.0,
           title: Padding(
             padding: EdgeInsets.all(10),
-            child: Text(
-                "TajuDN AI App",
-                style: GoogleFonts.honk(
-                    textStyle: Theme.of(context).textTheme.displayLarge,
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 1
-                )
-            ),
+              child: Text(
+                  "Taju Ai App",
+                  style: GoogleFonts.roboto(
+                      textStyle: Theme.of(context).textTheme.displayLarge,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 1,
+                      color: Colors.white
+                  )
+              )
           ),
         ),
       ),
@@ -60,12 +61,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.amber,
+        indicatorColor: Colors.orangeAccent,
         selectedIndex: currentPageIndex,
         destinations: [
           NavigationDestination(
             icon: Image.asset("assets/icons/chat.png", width: 35,),
-            label: 'Ask TajuDN',
+            label: 'Ask Taju',
           ),
           NavigationDestination(
             icon: Image.asset("assets/icons/picture.png", width: 35,),
