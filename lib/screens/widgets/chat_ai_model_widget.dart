@@ -37,7 +37,7 @@ class ChatAiModelWidget extends StatelessWidget {
                     "Ask Taju",
                     style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.displayLarge,
-                      fontSize: 30,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 1,

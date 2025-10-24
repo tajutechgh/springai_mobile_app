@@ -38,7 +38,7 @@ class ImageGenerationModelWidget extends StatelessWidget {
                     "Generate Image",
                     style: GoogleFonts.roboto(
                         textStyle: Theme.of(context).textTheme.displayLarge,
-                        fontSize: 30,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 1,

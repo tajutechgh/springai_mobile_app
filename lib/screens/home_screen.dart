@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "Taju Ai App",
                 style: GoogleFonts.roboto(
                   textStyle: Theme.of(context).textTheme.displayLarge,
-                  fontSize: 40,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.normal,
                   letterSpacing: 1,

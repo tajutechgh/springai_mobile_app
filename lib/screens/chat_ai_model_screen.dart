@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/gen_ai_service.dart';
 
 class ChatAiModelScreen extends StatefulWidget {
+
   const ChatAiModelScreen({super.key});
 
   @override
@@ -12,10 +13,10 @@ class ChatAiModelScreen extends StatefulWidget {
 }
 
 class _ChatAiModelScreenState extends State<ChatAiModelScreen> {
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late String askQuestionText;
   bool _isLoading = false;
-
   late Future<String?> futureAskTajuDNChatModelAnswer;
   late Future<String?>  getTajuDNAnswer;
 
@@ -60,7 +61,7 @@ class _ChatAiModelScreenState extends State<ChatAiModelScreen> {
 
   // clear the answer
   void clearAnswer( ) async{
-    GenAiService.clearSharedPreferencesStorage();
+    GenAiService.clearChatSharedPreferencesStorage();
     _refreshChatAiModelScreen();
   }
 
@@ -121,11 +122,10 @@ class _ChatAiModelScreenState extends State<ChatAiModelScreen> {
                           : Text(
                         "Ask Taju",
                         style: GoogleFonts.roboto(
-                          textStyle: Theme.of(context).textTheme.displayLarge,
-                          fontSize: 25,
+                          color: Colors.white,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1,
-                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -157,14 +157,21 @@ class _ChatAiModelScreenState extends State<ChatAiModelScreen> {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (snapshot.data == null || snapshot.data!.isEmpty) {
                         return Center(
-                            child: Text(
-                              'Hello i am Taju, write your question!',
-                              style: GoogleFonts.roboto(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1,
-                                color: Colors.deepOrange
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Hello Taju Here!',
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1,
+                                    color: Colors.deepOrange
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Icon(Icons.waving_hand, color: Colors.deepOrange,)
+                              ],
                             )
                         );
                       } else {

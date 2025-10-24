@@ -17,6 +17,6 @@ class BaseUrl {
 
   // endpoints
   static String getAskTajuDNChatModel(String prompt) => "$base/tajutechgh/ai/v1/ask/options?prompt=$prompt";
-  static String get generateImageModel => "$base/tajutechgh/ai/v1/generate/image/options";
+  static String getGenerateImageModel(String prompt, int number) => "$base/tajutechgh/ai/v1/generate/image?prompt=$prompt&quality=hd&number=$number";
   static String get prepareRecipeModel => "$base/tajutechgh/ai/v1/get/recipe";
 }

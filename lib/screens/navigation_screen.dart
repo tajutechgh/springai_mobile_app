@@ -18,8 +18,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final ThemeData theme = Theme.of(context);
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80.0),
@@ -30,12 +28,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
           backgroundColor: Colors.blueAccent,
           elevation: 5.0,
           title: Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(40),
               child: Text(
                   "Taju Ai App",
                   style: GoogleFonts.roboto(
                       textStyle: Theme.of(context).textTheme.displayLarge,
-                      fontSize: 40,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 1,
