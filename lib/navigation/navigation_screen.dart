@@ -12,34 +12,43 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
-
   int currentPageIndex = 0;
+
+  Widget _getPage(int index) {
+    switch (index) {
+      case 0:
+        return const ChatAiModelScreen();
+      case 1:
+        return const ImageGenerationModelScreen();
+      case 2:
+        return const RecipePreparationModelScreen();
+      default:
+        return const ChatAiModelScreen();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.0),
+        preferredSize: const Size.fromHeight(80.0),
         child: AppBar(
-          iconTheme: IconThemeData(
-              color: Colors.white
-          ),
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Colors.blueAccent,
           elevation: 5.0,
           title: Padding(
-            padding: EdgeInsets.all(40),
-              child: Text(
-                  "Taju Ai App",
-                  style: GoogleFonts.roboto(
-                      textStyle: Theme.of(context).textTheme.displayLarge,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 1,
-                      color: Colors.white
-                  )
-              )
+            padding: const EdgeInsets.all(40),
+            child: Text(
+              "Taju Ai App",
+              style: GoogleFonts.roboto(
+                textStyle: Theme.of(context).textTheme.displayLarge,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.normal,
+                letterSpacing: 1,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       ),
@@ -48,7 +57,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         height: 120,
         elevation: 10.0,
         labelTextStyle: WidgetStateProperty.all(
-            TextStyle(
+          const TextStyle(
             color: Colors.white,
             fontSize: 15,
             fontWeight: FontWeight.bold,
@@ -63,31 +72,20 @@ class _NavigationScreenState extends State<NavigationScreen> {
         selectedIndex: currentPageIndex,
         destinations: [
           NavigationDestination(
-            icon: Image.asset("assets/icons/chat.png", width: 35,),
+            icon: Image.asset("assets/images/chat.png", width: 35,),
             label: 'Ask Taju',
           ),
           NavigationDestination(
-            icon: Image.asset("assets/icons/picture.png", width: 35,),
+            icon: Image.asset("assets/images/picture.png", width: 35,),
             label: 'Generate Image',
           ),
           NavigationDestination(
-            icon: Image.asset("assets/icons/recipe.png", width: 35,),
+            icon: Image.asset("assets/images/recipe.png", width: 35,),
             label: 'Prepare Recipe',
           ),
         ],
       ),
-      body: [
-
-        // Ask TajuDN
-        ChatAiModelScreen(),
-
-        // Generate Image
-        ImageGenerationModelScreen(),
-
-        // Prepare Recipe
-        RecipePreparationModelScreen()
-
-      ][currentPageIndex],
+      body: _getPage(currentPageIndex),
     );
   }
 }

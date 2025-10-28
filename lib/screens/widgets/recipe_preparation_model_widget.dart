@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../navigation_screen.dart';
+import '../../navigation/navigation_screen.dart';
 
 class RecipePreparationModelWidget extends StatelessWidget {
   const RecipePreparationModelWidget({super.key});
@@ -23,7 +23,8 @@ class RecipePreparationModelWidget extends StatelessWidget {
         },
         child: Container(
           height: 150,
-          width: MediaQuery.of(context).size.width-20,
+          constraints: const BoxConstraints(minWidth: 0),
+          width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.blueAccent,
             borderRadius: BorderRadius.circular(10),
@@ -32,7 +33,7 @@ class RecipePreparationModelWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/recipe.png", width: 60,),
+                  Image.asset("assets/images/recipe.png", width: 60,),
                   SizedBox(width: 10,),
                   Text(
                     "Prepare Recipe",

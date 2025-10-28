@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:springai_mobile_app/screens/navigation_screen.dart';
+import 'package:springai_mobile_app/navigation/navigation_screen.dart';
 
 class ChatAiModelWidget extends StatelessWidget {
   const ChatAiModelWidget({super.key});
@@ -22,7 +22,8 @@ class ChatAiModelWidget extends StatelessWidget {
         },
         child: Container(
           height: 150,
-          width: MediaQuery.of(context).size.width-20,
+          constraints: const BoxConstraints(minWidth: 0),
+          width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.blueAccent,
             borderRadius: BorderRadius.circular(10),
@@ -31,7 +32,7 @@ class ChatAiModelWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/chat.png", width: 60,),
+                  Image.asset("assets/images/chat.png", width: 60,),
                   SizedBox(width: 10,),
                   Text(
                     "Ask Taju",

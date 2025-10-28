@@ -1,9 +1,11 @@
-import 'dart:typed_data';
 import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 import '../services/gen_ai_service.dart';
 
 enum ImageNumber { one, two, three, four }
@@ -27,14 +29,15 @@ class ImageGenerationModelScreen extends StatefulWidget {
   const ImageGenerationModelScreen({super.key});
 
   @override
-  State<ImageGenerationModelScreen> createState() => _ImageGenerationModelScreenState();
+  State<ImageGenerationModelScreen> createState() =>
+      _ImageGenerationModelScreenState();
 }
 
-class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen> {
-
+class _ImageGenerationModelScreenState
+    extends State<ImageGenerationModelScreen> {
   ImageNumber _number = ImageNumber.one;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String imageDescription;
+  String? imageDescription;
   bool _isLoading = false;
   late Future<List<Uint8List>> getGeneratedImages;
   bool _isDeleted = true;
@@ -47,7 +50,14 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
 
   void _refreshImages() {
     setState(() {
-      getGeneratedImages = GenAiService.getGeneratedImagesResponse();
+      try {
+        getGeneratedImages = GenAiService.getGeneratedImagesResponse();
+      } catch (e, s) {
+        if (kDebugMode) {
+          print("Error initializing images: $e\n$s");
+        }
+        getGeneratedImages = Future.value([]);
+      }
       _isLoading = false;
     });
   }
@@ -57,20 +67,32 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
 
     setState(() {
       _isLoading = true;
-      _isDeleted = false;
     });
 
     try {
-      await GenAiService.getGenerateImageModelResponse(imageDescription, _number.value);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+      await GenAiService.getGenerateImageModelResponse(
+        imageDescription!,
+        _number.value,
+      );
+    } catch (exception) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error: $exception")));
+      }
     } finally {
-      if (mounted) _refreshImages();
+      if (mounted) {
+        _refreshImages();
+
+        setState(() {
+          _isDeleted = false;
+        });
+      }
     }
   }
 
   // clear the images
-  void clearImages( ) async{
+  void clearImages() async {
     GenAiService.clearImagesSharedPreferencesStorage();
 
     _isLoading = true;
@@ -81,7 +103,7 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
   Future<void> downloadImage(Uint8List bytes, String fileName) async {
     try {
       var status = await Permission.storage.request();
-      if (!status.isGranted) {
+      if (!status.isGranted && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Storage permission denied")),
         );
@@ -98,12 +120,17 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
 
       final file = File('${directory.path}/$fileName.png');
       await file.writeAsBytes(bytes);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Image saved to ${file.path}")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Image saved to ${file.path}")));
+      }
     } catch (exception) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Download failed: $exception")));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Download failed: $exception")));
+      }
     }
   }
 
@@ -119,7 +146,7 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
               key: _formKey,
               child: Column(
                 children: [
-                  SizedBox(height: 15,),
+                  SizedBox(height: 15),
                   TextFormField(
                     minLines: 1,
                     maxLines: null,
@@ -145,8 +172,8 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
                     child: Text(
                       "Select number of images:",
                       style: GoogleFonts.roboto(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -156,18 +183,20 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: ImageNumber.values.map((numberOfImages) {
                       return Expanded(
-                          child: RadioGroup<ImageNumber>(
-                            groupValue: _number,
-                            onChanged: (ImageNumber? value) {
-                              setState(() {
-                                _number = value!;
+                        child: RadioGroup<ImageNumber>(
+                          groupValue: _number,
+                          onChanged: (ImageNumber? value) {
+                            setState(() {
+                              _number = value!;
                             });
                           },
                           child: ListTile(
                             title: Text(
-                                numberOfImages.value.toString(),
-                                style: GoogleFonts.roboto(
-                                fontSize: 16, fontWeight: FontWeight.w500),
+                              numberOfImages.value.toString(),
+                              style: GoogleFonts.roboto(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             leading: Radio<ImageNumber>(value: numberOfImages),
                             visualDensity: VisualDensity.compact,
@@ -182,6 +211,8 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
                     onTap: _isLoading ? null : generateImage,
                     child: Container(
                       height: 50,
+                      constraints: const BoxConstraints(minWidth: 0),
+                      width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.blueAccent,
                         borderRadius: BorderRadius.circular(10),
@@ -189,18 +220,19 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
                       child: Center(
                         child: _isLoading
                             ? const CircularProgressIndicator(
-                          valueColor:
-                          AlwaysStoppedAnimation<Color>(Colors.white),
-                        )
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              )
                             : Text(
-                          "Generate Image",
-                          style: GoogleFonts.roboto(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1,
-                          ),
-                        ),
+                                "Generate Image",
+                                style: GoogleFonts.roboto(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -208,47 +240,47 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
                 ],
               ),
             ),
-            if(_isDeleted == false)
-            Row(
-              children: [
-                Icon(Icons.delete, size: 25, color: Colors.red,),
-                TextButton(
-                  onPressed: (){
-                     clearImages();
-                  },
-                  child: Text(
-                    "Clear The Images",
-                    style: GoogleFonts.roboto(
+            if (_isDeleted == false)
+              Row(
+                children: [
+                  Icon(Icons.delete, size: 25, color: Colors.red),
+                  TextButton(
+                    onPressed: () {
+                      clearImages();
+                    },
+                    child: Text(
+                      "Clear The Images",
+                      style: GoogleFonts.roboto(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1,
-                        color: Colors.red
+                        color: Colors.red,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
             FutureBuilder<List<Uint8List>>(
               future: getGeneratedImages,
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Hello Taju Here!',
-                            style: GoogleFonts.roboto(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
-                                color: Colors.deepOrange
-                            ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Hello Taju Here!',
+                          style: GoogleFonts.roboto(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                            color: Colors.deepOrange,
                           ),
-                          SizedBox(width: 10,),
-                          Icon(Icons.waving_hand, color: Colors.deepOrange,)
-                        ],
-                      )
+                        ),
+                        SizedBox(width: 10),
+                        Icon(Icons.waving_hand, color: Colors.deepOrange),
+                      ],
+                    ),
                   );
                 }
                 final images = snapshot.data!;
@@ -256,8 +288,7 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: images.length,
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
@@ -286,8 +317,11 @@ class _ImageGenerationModelScreenState extends State<ImageGenerationModelScreen>
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               padding: const EdgeInsets.all(6),
-                              child: const Icon(Icons.download,
-                                  color: Colors.white, size: 20),
+                              child: const Icon(
+                                Icons.download,
+                                color: Colors.white,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ),

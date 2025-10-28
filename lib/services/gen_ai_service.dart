@@ -12,7 +12,7 @@ class GenAiService {
   static Future<String?> getTajuDNChatModelAnswer(String question) async {
 
     // clear the previous data before continuing
-    clearChatSharedPreferencesStorage();
+    clearPreparedRecipePreferencesStorage();
 
     final response = await http.get(
 
@@ -53,7 +53,7 @@ class GenAiService {
   }
 
   // clear chat shared preferences
-  static Future<void> clearChatSharedPreferencesStorage() async{
+  static Future<void>clearChatSharedPreferencesStorage() async{
 
     final prefs = await SharedPreferences.getInstance();
 
@@ -127,5 +127,51 @@ class GenAiService {
     await prefs.remove("images");
 
     if (kDebugMode) print('Images cleared.');
+  }
+
+  // Generate Recipe
+  static Future<String?> getPrepareRecipeModelResponse(String ingredients, String cuisine, String dietaryRestrictions) async {
+
+    clearPreparedRecipePreferencesStorage();
+
+    final response = await http.get(Uri.parse(BaseUrl.getPrepareRecipeModel(ingredients, cuisine, dietaryRestrictions)),
+
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+      },
+
+    );
+
+    if (response.statusCode == 200) {
+
+      final outputData = response.body;
+
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString("prepared-recipe", outputData);
+
+      return outputData;
+
+    } else {
+
+      throw Exception('API error ${response.statusCode}: ${response.body}');
+    }
+  }
+
+
+  // get the the prepared recipe response
+  static Future<String?> getPreparedRecipe() async {
+
+    final prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString("prepared-recipe");
+  }
+
+  // clear prepared recipe shared preferences
+  static Future<void> clearPreparedRecipePreferencesStorage() async{
+
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("prepared-recipe");
   }
 }
